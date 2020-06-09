@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func handleLandingPage(writer http.ResponseWriter, request *http.Request) {
@@ -11,6 +13,8 @@ func handleLandingPage(writer http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", handleLandingPage)
-	http.ListenAndServe(":8000", nil)
+	mux := mux.NewRouter()
+	mux.HandleFunc("/", handleLandingPage)
+	mux.HandleFunc("/demo", handleLandingPage)
+	http.ListenAndServe(":8000", mux)
 }
