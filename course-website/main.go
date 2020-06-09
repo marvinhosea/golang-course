@@ -7,14 +7,19 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func handleLandingPage(writer http.ResponseWriter, request *http.Request) {
+func home(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
 	fmt.Fprint(writer, "<h1>Hello There Marvin</h1>")
 }
 
+func contact(writer http.ResponseWriter, request *http.Request) {
+	writer.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(writer, "<h1>This is a contact page</h1> <br /> Email us: marvin@appslab.co.ke")
+}
+
 func main() {
-	mux := mux.NewRouter()
-	mux.HandleFunc("/", handleLandingPage)
-	mux.HandleFunc("/demo", handleLandingPage)
-	http.ListenAndServe(":8000", mux)
+	router := mux.NewRouter()
+	router.HandleFunc("/", home)
+	router.HandleFunc("/contact", contact)
+	http.ListenAndServe(":8000", router)
 }
