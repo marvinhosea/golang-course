@@ -9,6 +9,7 @@ import (
 )
 
 var homePage *template.Template
+var contactPage *template.Template
 
 func home(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
@@ -20,7 +21,10 @@ func home(writer http.ResponseWriter, request *http.Request) {
 
 func contact(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(writer, "<h1>This is a contact page</h1> <br /> Email us: marvin@appslab.co.ke")
+	err := contactPage.Execute(writer, nil)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func notFound(writer http.ResponseWriter, request *http.Request) {
@@ -38,6 +42,12 @@ func main() {
 	var err error
 
 	homePage, err = template.ParseFiles("views/home.gohtml")
+
+	if err != nil {
+		panic(err)
+	}
+
+	contactPage, err = template.ParseFiles("views/contact.gohtml")
 
 	if err != nil {
 		panic(err)
