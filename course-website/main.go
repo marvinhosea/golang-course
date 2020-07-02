@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-chi/chi"
 	"morandev.com/views"
 	"net/http"
-
-	"github.com/gorilla/mux"
 )
 
 var homePage *views.View
@@ -48,10 +47,10 @@ func main() {
 	contactPage = views.NewView("views/contact.gohtml")
 	faqPage = views.NewView("views/faq.gohtml")
 	
-	router := mux.NewRouter()
-	router.HandleFunc("/", home)
-	router.HandleFunc("/contact", contact)
-	router.HandleFunc("/faq", faq)
-	router.NotFoundHandler = http.HandlerFunc(notFound)
+	router := chi.NewRouter()
+	router.Get("/", home)
+	router.Get("/contact", contact)
+	router.Get("/faq", faq)
+	//router.NotFoundHandler = http.HandlerFunc(notFound)
 	http.ListenAndServe(":8000", router)
 }
