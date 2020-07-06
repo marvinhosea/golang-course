@@ -13,7 +13,7 @@ var faqPage *views.View
 
 func home(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	err := homePage.Template.Execute(writer, nil)
+	err := homePage.Template.ExecuteTemplate(writer, homePage.Layout, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -21,7 +21,7 @@ func home(writer http.ResponseWriter, request *http.Request) {
 
 func contact(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	err := contactPage.Template.Execute(writer, nil)
+	err := contactPage.Template.ExecuteTemplate(writer, contactPage.Layout, nil)
 	if err != nil {
 		panic(err)
 	}
@@ -35,22 +35,21 @@ func notFound(writer http.ResponseWriter, request *http.Request) {
 
 func faq(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	err := faqPage.Template.Execute(writer, nil)
-
+	err := faqPage.Template.ExecuteTemplate(writer, faqPage.Layout, nil)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func main() {
-	homePage = views.NewView("views/home.gohtml")
-	contactPage = views.NewView("views/contact.gohtml")
-	faqPage = views.NewView("views/faq.gohtml")
+	contactPage = views.NewView("appLayout","views/contact.gohtml")
+	homePage = views.NewView("appLayout","views/home.gohtml")
+	faqPage = views.NewView("appLayout","views/faq.gohtml")
 	
 	router := chi.NewRouter()
 	router.Get("/", home)
 	router.Get("/contact", contact)
 	router.Get("/faq", faq)
 	//router.NotFoundHandler = http.HandlerFunc(notFound)
-	http.ListenAndServe(":8000", router)
+	_ = http.ListenAndServe(":8000", router)
 }
