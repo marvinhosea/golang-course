@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/go-chi/chi"
 	"morandev.com/views"
 	"net/http"
@@ -13,32 +12,17 @@ var faqPage *views.View
 
 func home(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	err := homePage.Template.ExecuteTemplate(writer, homePage.Layout, nil)
-	if err != nil {
-		panic(err)
-	}
+	must(homePage.Render(writer, nil))
 }
 
 func contact(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	err := contactPage.Template.ExecuteTemplate(writer, contactPage.Layout, nil)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func notFound(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Content-Type", "text/html")
-	writer.WriteHeader(http.StatusNotFound)
-	fmt.Fprint(writer, "The page you are looking is not found")
+	must(contactPage.Render(writer, nil))
 }
 
 func faq(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "text/html")
-	err := faqPage.Template.ExecuteTemplate(writer, faqPage.Layout, nil)
-	if err != nil {
-		panic(err)
-	}
+	must(faqPage.Render(writer, nil))
 }
 
 func main() {
@@ -49,7 +33,13 @@ func main() {
 	router := chi.NewRouter()
 	router.Get("/", home)
 	router.Get("/contact", contact)
-	router.Get("/faq", faq)
+	router.Get("/faqs", faq)
 	//router.NotFoundHandler = http.HandlerFunc(notFound)
 	_ = http.ListenAndServe(":8000", router)
+}
+
+func must(error error)  {
+	if error != nil {
+		panic(error)
+	}
 }
